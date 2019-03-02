@@ -6,7 +6,7 @@ import Chart from 'chart.js'
  * Functions to generate chartJs data for model
  */
 
-function makeLineChartData(title, xAxisLabel, yAxisLabel) {
+function makeLineChartData (title, xAxisLabel, yAxisLabel) {
   return {
     type: 'line',
     data: {
@@ -21,7 +21,7 @@ function makeLineChartData(title, xAxisLabel, yAxisLabel) {
         display: true,
         position: 'right',
         labels: {
-          filter: function(legend) {
+          filter: function (legend) {
             if (!_.isNil(legend.lineDash)) {
               return false
             }
@@ -82,7 +82,7 @@ const colors = [
 
 let seenNames = []
 
-function getColor(name) {
+function getColor (name) {
   let i = seenNames.indexOf(name)
   if (i < 0) {
     seenNames.push(name)
@@ -97,7 +97,7 @@ function getColor(name) {
  *
  */
 class ChartWidget {
-  constructor(divTag, chartData) {
+  constructor (divTag, chartData) {
     this.divTag = divTag
     this.div = $(this.divTag)
     let canvas = $('<canvas>')
@@ -111,15 +111,15 @@ class ChartWidget {
     this.defaultColors = colors
   }
 
-  getDatasets() {
+  getDatasets () {
     return this.chartData.data.datasets
   }
 
-  getChartOptions() {
+  getChartOptions () {
     return this.chartData.options
   }
 
-  addDataset(key, xValues, yValues, color = null, isDash = false) {
+  addDataset (key, xValues, yValues, color = null, isDash = false) {
     let datasets = this.getDatasets()
     let newDatasetData = []
     if (xValues && yValues) {
@@ -152,7 +152,7 @@ class ChartWidget {
     return iDataset
   }
 
-  updateDataset(iDataset, xValues, yValues) {
+  updateDataset (iDataset, xValues, yValues) {
     let data = []
     for (let i = 0; i < xValues.length; i += 1) {
       data.push({
@@ -165,7 +165,7 @@ class ChartWidget {
     this.chart.update()
   }
 
-  updateDatasetByKey(key, xValues, yValues) {
+  updateDatasetByKey (key, xValues, yValues) {
     let data = []
     for (let i = 0; i < xValues.length; i += 1) {
       data.push({
@@ -178,27 +178,27 @@ class ChartWidget {
     this.chart.update()
   }
 
-  setTitle(title) {
+  setTitle (title) {
     let options = this.getChartOptions()
     options.title.text = title
   }
 
-  setXLabel(xLabel) {
+  setXLabel (xLabel) {
     let options = this.getChartOptions()
     options.scales.xAxes[0].scaleLabel.labelString = xLabel
   }
 
-  setYLabel(yLabel) {
+  setYLabel (yLabel) {
     let options = this.getChartOptions()
     options.scales.yAxes[0].scaleLabel.labelString = yLabel
   }
 
-  setXMax(maxVal) {
+  setXMax (maxVal) {
     let options = this.getChartOptions()
     options.scales.xAxes[0].ticks.max = maxVal
   }
 
-  setYMax(maxVal) {
+  setYMax (maxVal) {
     let options = this.getChartOptions()
     options.scales.yAxes[0].ticks.max = maxVal
   }

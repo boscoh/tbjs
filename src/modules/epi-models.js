@@ -2,7 +2,7 @@ import _ from 'lodash'
 import PopJs from './pop-js'
 
 class TbModel extends PopJs {
-  constructor(id) {
+  constructor (id) {
     super(id)
     this.id = id
 
@@ -173,7 +173,7 @@ class TbModel extends PopJs {
     ]
   }
 
-  calcExtraParams() {
+  calcExtraParams () {
     this.param.beta = this.param.betaPerYear / 365
     this.param.betaAgain = this.param.betaRatio * this.param.beta
     this.param.diagnosisRate =
@@ -195,7 +195,7 @@ class TbModel extends PopJs {
     }
   }
 
-  calcVars() {
+  calcVars () {
     this.var.population = _.sum(_.values(this.compartment))
     this.var.rateForce =
       (this.param.beta * this.compartment.infectious) / this.var.population
@@ -203,7 +203,7 @@ class TbModel extends PopJs {
       (this.param.betaAgain * this.compartment.infectious) / this.var.population
   }
 
-  calcDiagnosticVars() {
+  calcDiagnosticVars () {
     this.var.prevalence =
       (this.compartment.infectious / this.var.population) * 100000
     this.var.incidence = 0

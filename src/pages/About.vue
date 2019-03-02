@@ -2,33 +2,37 @@
   <v-container>
     <v-layout
       justify-center
-      row>
+      row
+    >
       <v-flex
         xs10
         md6
-        lg6>
-        <h2
-          class="display-2 pt-4 pb-3">
-          Standard TB Model
+        lg6
+      >
+        <h2 class="display-2 pt-4 pb-3">
+          About
         </h2>
 
         <p style="padding-top: 2em">
-          This is an app for exploring a basic compartmental model
-          for TB.
+          This is an app for exploring a basic compartmental model for TB.
         </p>
 
         <v-data-table
           :headers="headers"
           :items="definitions"
           class="elevation-1"
-          hide-actions="false">
+          hide-actions="false"
+        >
           <template
             slot="items"
-            slot-scope="props">
+            slot-scope="props"
+          >
             <td>
+              <!-- eslint-disable-next-line -->
               <span v-html="props.item.symbol"></span>
             </td>
             <td class="text-xs-left">
+              <!-- eslint-disable-next-line -->
               <span v-html="props.item.name"></span>
             </td>
           </template>
@@ -37,7 +41,6 @@
         <p>
           <v-img src="static/diagram.jpg"></v-img>
         </p>
-
       </v-flex>
     </v-layout>
   </v-container>
@@ -45,7 +48,7 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       headers: [
         {

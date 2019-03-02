@@ -6,12 +6,13 @@
       md4
       offset-md4
       lg4
-      offset-lg4>
+      offset-lg4
+    >
       <v-card class="mt-5">
-
         <v-card-title
           primary-title
-          class="headline">
+          class="headline"
+        >
           Register to {{ title }}
         </v-card-title>
 
@@ -19,26 +20,28 @@
           <form
             novalidate
             class="login-screen"
-            @submit.prevent="submit">
-
+            @submit.prevent="submit"
+          >
             <v-text-field
-              v-validate="'name'"
               v-model="name"
+              v-validate="'name'"
               :error-messages="errors.collect('name')"
               label="User name"
-              data-vv-name="name"></v-text-field>
+              data-vv-name="name"
+            ></v-text-field>
 
             <v-text-field
-              v-validate="'email'"
               v-model="email"
+              v-validate="'email'"
               :error-messages="errors.collect('email')"
               label="E-mail address"
-              data-vv-name="email"></v-text-field>
+              data-vv-name="email"
+            ></v-text-field>
 
             <v-text-field
-              v-validate="'required|min:6'"
               ref="password"
               v-model="rawPassword"
+              v-validate="'required|min:6'"
               :append-icon="passwordHidden ? 'visibility' : 'visibility_off'"
               :append-icon-cb="() => (passwordHidden = !passwordHidden)"
               :type="passwordHidden ? 'password' : 'text'"
@@ -47,14 +50,19 @@
               counter
               label="Password"
               data-vv-name="password"
-              data-vv-delay="300"></v-text-field>
+              data-vv-delay="300"
+            ></v-text-field>
 
             <v-text-field
-              v-validate="'required|confirmed:password'"
               ref="password_confirmation"
               v-model="rawPasswordConfirm"
-              :append-icon="confirmPasswordHidden ? 'visibility' : 'visibility_off'"
-              :append-icon-cb="() => (confirmPasswordHidden = !confirmPasswordHidden)"
+              v-validate="'required|confirmed:password'"
+              :append-icon="
+                confirmPasswordHidden ? 'visibility' : 'visibility_off'
+              "
+              :append-icon-cb="
+                () => (confirmPasswordHidden = !confirmPasswordHidden)
+              "
               :type="confirmPasswordHidden ? 'password' : 'text'"
               :error-messages="errors.collect('password_confirmation')"
               hint="At least 6 characters"
@@ -62,23 +70,24 @@
               label="Confirm Password"
               target="password"
               data-vv-name="password_confirmation"
-              data-vv-delay="300"></v-text-field>
+              data-vv-delay="300"
+            ></v-text-field>
 
             <v-btn
               type="submit"
-              class="v-accent">
+              class="v-accent"
+            >
               Register
             </v-btn>
 
             <div
               v-if="error"
-              style="color: red">
+              style="color: red"
+            >
               {{ error }}
             </div>
-
           </form>
         </v-card-text>
-
       </v-card>
     </v-flex>
   </v-container>
@@ -89,7 +98,7 @@ import auth from '../../modules/auth'
 import config from '../../config'
 
 export default {
-  data() {
+  data () {
     return {
       title: config.title,
       name: '',
@@ -103,7 +112,7 @@ export default {
     }
   },
   methods: {
-    async submit() {
+    async submit () {
       this.error = ''
 
       let payload = {

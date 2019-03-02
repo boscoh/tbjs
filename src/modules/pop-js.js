@@ -43,7 +43,7 @@ class BaseModel {
    *    the given time-point
    *    to be saved in this.solutions
    */
-  constructor(id) {
+  constructor (id) {
     // Name of the particular instance of the model
     this.id = id
 
@@ -160,7 +160,7 @@ class BaseModel {
    *
    * @returns list[{}] paramEntries
    */
-  getGuiParams() {
+  getGuiParams () {
     return _.cloneDeep(this.guiParams)
   }
 
@@ -170,7 +170,7 @@ class BaseModel {
    *
    * @returns list[{}] paramEntries
    */
-  getInterventionParams() {
+  getInterventionParams () {
     if (this.interventionParams.length > 0) {
       return _.cloneDeep(this.interventionParams)
     } else {
@@ -185,7 +185,7 @@ class BaseModel {
    *
    * @param guiParams
    */
-  importGuiParams(guiParams) {
+  importGuiParams (guiParams) {
     this.param = _.cloneDeep(this.defaultParams)
     for (let param of guiParams) {
       this.param[param.key] = parseFloat(param.value)
@@ -196,14 +196,14 @@ class BaseModel {
    * To be overridden. Calculates new this.param from
    * existing this.param.
    */
-  calcExtraParams() {}
+  calcExtraParams () {}
 
   /**
    * To be overridden. Initializations of compartments
    * from this.param, used at the beginning of a run and typically
    * called by this.initCompartments
    */
-  initCompartmentsByParams() {
+  initCompartmentsByParams () {
     this.compartment.infectious = this.param.initPrevalence
     this.compartment.susceptible =
       this.param.initPopulation - this.param.initPrevalence
@@ -212,7 +212,7 @@ class BaseModel {
   /**
    * Called before running a simulation
    */
-  initCompartments() {
+  initCompartments () {
     this.keys = _.keys(this.compartment)
     for (let key of this.keys) {
       this.compartment[key] = 0
@@ -229,7 +229,7 @@ class BaseModel {
    *
    * @param [params] - a param folds a dictionary for a value and its bounds and step
    */
-  applyIntervention(guiParams) {
+  applyIntervention (guiParams) {
     for (let param of guiParams) {
       this.param[param.key] = parseFloat(param.value)
     }
@@ -241,7 +241,7 @@ class BaseModel {
    * re-running the simulation from the beginning and
    * for reseting a simulation as an intervention
    */
-  clearSolutions() {
+  clearSolutions () {
     this.calcVars()
     this.calcDiagnosticVars()
     this.solution = {}
@@ -265,7 +265,7 @@ class BaseModel {
    *
    * @param dTime
    */
-  saveToSolution(dTime) {
+  saveToSolution (dTime) {
     for (let key of _.keys(this.compartment)) {
       if (!isFinite(this.compartment[key])) {
         return
@@ -285,14 +285,14 @@ class BaseModel {
    * relevant to each time-point from compartment and
    * params values.
    */
-  calcVars() {}
+  calcVars () {}
 
   /**
    * Sanity check to make sure that there are suitable
    * this.var and this.param for the varEvents and
    * paramEvents that are defined.
    */
-  checkEvents() {
+  checkEvents () {
     this.calcVars()
     let varKeys = _.keys(this.var)
     for (let varEvent of this.varEvents) {
@@ -319,7 +319,7 @@ class BaseModel {
   /**
    * Clears variables for transfers with other countryModels to occur
    */
-  clearDelta() {
+  clearDelta () {
     for (let key of this.keys) {
       this.delta[key] = 0
     }
@@ -333,7 +333,7 @@ class BaseModel {
    * @param toCountryModel - another BaseModel
    * @param travelPerDay - number of people travelling between the two epiModels
    */
-  transferTo(toCountryModel, travelPerDay) {
+  transferTo (toCountryModel, travelPerDay) {
     let probSickCanTravel = 1
     let probTravelPerDay = travelPerDay / this.var.population
     let probSickTravelPerDay = probSickCanTravel * probTravelPerDay
@@ -349,7 +349,7 @@ class BaseModel {
    * to allow for both the construction of differentials
    * and to use randomized samples further down the track
    */
-  calcEvents() {
+  calcEvents () {
     this.calcVars()
 
     this.events.length = 0
@@ -370,9 +370,9 @@ class BaseModel {
    * relevant to each time-point from compartment and
    * params values.
    */
-  calcDiagnosticVars() {}
+  calcDiagnosticVars () {}
 
-  integrateStep(dTime) {
+  integrateStep (dTime) {
     this.dTime = dTime
     this.calcEvents()
 
@@ -418,7 +418,7 @@ class BaseModel {
     this.saveToSolution(this.dTime)
   }
 
-  run(nStep = 30, dTimeInDay = 1) {
+  run (nStep = 30, dTimeInDay = 1) {
     this.time = this.startTime
     this.times.push(this.time)
 

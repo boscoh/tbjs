@@ -2,29 +2,27 @@
   <v-container
     style="height: calc(100vh - 58px)"
     fluid
-    grid-list-xl>
-
+    grid-list-xl
+  >
     <v-layout>
       <v-flex>
-        <h2
-          class="display-1 pb-2">
+        <h2 class="display-1 pb-2">
           {{ title }}
         </h2>
       </v-flex>
     </v-layout>
 
-    <v-layout
-      row>
-
+    <v-layout row>
       <v-flex
         xs5
         md4
-        lg3>
+        lg3
+      >
         <v-card
           style="
             height: calc(100vh - 180px);
-            overflow: auto;">
-
+            overflow: auto;"
+        >
           <v-card-title class="headline">
             Parameters
           </v-card-title>
@@ -34,16 +32,19 @@
               v-for="(param, i) of sliders"
               :key="i"
               style="text-align: left"
-              column>
+              column
+            >
               {{ param.label }} =
-              {{ param.decimal ? param.value.toFixed(param.decimal) : param.value }}
+              {{
+                param.decimal ? param.value.toFixed(param.decimal) : param.value
+              }}
               <v-slider
+                v-model="param.value"
                 :step="param.interval"
                 :max="param.max"
-                v-model="param.value"
-                @callback="changeGraph()"></v-slider>
+                @callback="changeGraph()"
+              ></v-slider>
             </div>
-
           </v-card-text>
 
           <v-card-title class="headline">
@@ -55,47 +56,48 @@
               v-for="(param, i) of interventionSliders"
               :key="i"
               style="text-align: left"
-              column>
+              column
+            >
               {{ param.label }} =
-              {{ param.decimal ? param.value.toFixed(param.decimal) : param.value }}
+              {{
+                param.decimal ? param.value.toFixed(param.decimal) : param.value
+              }}
               <v-slider
+                v-model="param.value"
                 :step="param.interval"
                 :max="param.max"
-                v-model="param.value"
-                @callback="changeGraph()"></v-slider>
+                @callback="changeGraph()"
+              ></v-slider>
             </div>
-
           </v-card-text>
-
         </v-card>
       </v-flex>
 
       <v-flex
         xs7
         md8
-        lg9>
+        lg9
+      >
         <v-card
           style="
             height: calc(100vh - 180px);
-            overflow: auto;">
-
+            overflow: auto;"
+        >
           <v-card-title class="headline">
             Graphs
           </v-card-title>
 
           <v-card-text>
-            <div 
-              id="epi-charts" 
+            <div
+              id="epi-charts"
               style="
                 display: flex;
-                flex-wrap: wrap"></div>
+                flex-wrap: wrap"
+            ></div>
           </v-card-text>
-
         </v-card>
       </v-flex>
-
     </v-layout>
-
   </v-container>
 </template>
 
@@ -114,17 +116,17 @@ import $ from 'jquery'
 import _ from 'lodash'
 import config from '../config'
 
-function sumLists(a, b) {
+function sumLists (a, b) {
   return _.map(_.zip(a, b), x => x[0] + x[1])
 }
 
-function reversed(l) {
+function reversed (l) {
   let result = _.cloneDeep(l)
   result.reverse()
   return result
 }
 
-function acumulateValues(vals) {
+function acumulateValues (vals) {
   let result = []
   for (let i of _.range(vals.length)) {
     let val = _.sum(vals.slice(0, i + 1))
@@ -134,7 +136,7 @@ function acumulateValues(vals) {
 }
 
 class StackGraph {
-  constructor(selector, title, xlabel, keys) {
+  constructor (selector, title, xlabel, keys) {
     this.keys = keys
     this.chartWidget = new ChartWidget(selector)
     this.chartWidget.setTitle(title)
@@ -152,7 +154,7 @@ class StackGraph {
     datasets[n - 1].fill = 'origin'
   }
 
-  updateFromModel(model) {
+  updateFromModel (model) {
     this.model = model
     let x = _.map(this.model.times, t => t / 365)
     let y
@@ -168,7 +170,7 @@ class StackGraph {
 }
 
 class EndStackGraph {
-  constructor(selector, title, xlabel, keys) {
+  constructor (selector, title, xlabel, keys) {
     this.keys = keys
     this.chartWidget = new ChartWidget(selector)
     this.chartWidget.setTitle(title)
@@ -186,7 +188,7 @@ class EndStackGraph {
     datasets[n - 1].fill = 'origin'
   }
 
-  updateFromModel(model) {
+  updateFromModel (model) {
     this.model = model
     let x = [0, 1]
     let y = null
@@ -201,7 +203,7 @@ class EndStackGraph {
 }
 
 class InterventionGraph {
-  constructor(selector, title, xlabel, keys) {
+  constructor (selector, title, xlabel, keys) {
     this.keys = keys
     this.chartWidget = new ChartWidget(selector)
     this.chartWidget.setTitle(title)
@@ -220,7 +222,7 @@ class InterventionGraph {
     }
   }
 
-  updateFromModel(model, intervention) {
+  updateFromModel (model, intervention) {
     this.model = model
     this.intervention = intervention
     let x, y
@@ -249,7 +251,7 @@ class InterventionGraph {
 }
 
 export default {
-  data() {
+  data () {
     return {
       title: config.title,
       sliders: [],
@@ -258,19 +260,19 @@ export default {
   },
   watch: {
     sliders: {
-      handler() {
+      handler () {
         this.changeGraph()
       },
       deep: true
     },
     interventionSliders: {
-      handler() {
+      handler () {
         this.changeGraph()
       },
       deep: true
     }
   },
-  async mounted() {
+  async mounted () {
     let epiModel = epiModels[0]
     this.model = new epiModel.Class()
     this.dTimeInDay = 365 / 12
@@ -346,7 +348,7 @@ export default {
     }
   },
   methods: {
-    runModelAndIntervention() {
+    runModelAndIntervention () {
       this.model.clearSolutions()
       this.model.initCompartments()
 
@@ -379,10 +381,10 @@ export default {
         )
       }
     },
-    convertYearToStep(year) {
+    convertYearToStep (year) {
       return parseInt((year * 365) / this.dTimeInDay)
     },
-    changeGraph() {
+    changeGraph () {
       this.model.importGuiParams(this.sliders)
       let entry = _.find(
         this.interventionSliders,
