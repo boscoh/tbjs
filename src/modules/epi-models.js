@@ -16,44 +16,52 @@ class TbModel extends PopJs {
       diagnosed: 0,
       treated: 0,
       dead: 0,
-      susceptiblePastInfection: 0
+      susceptibleRecovered: 0,
+      susceptibleTreated: 0
     }
 
     this.defaultParams = {
       initPopulation: 5000,
       initPrevalence: 300,
       beta: 5,
-      betaAgain: 5,
+      betaRecovered: 5,
+      betaRecoveredRatio: 1,
       latentChangeRate: 1 / 100,
       infectionEarlyRate: 1.1 / 1000,
       infectionLateRate: 5.5 / 1000000,
       treatmentEarlyRate: 0,
       treatmentRemoteRate: 0,
+      betaTreatedRatio: 0.21,
       diagnosisRate: 1 / 365 / 3,
       toTreatementRate: 1 / 14,
       treatmentDuration: 182,
       activeTreatmentRate: 2 / 365,
       deathRate1: 1 / 365 / 3,
-      deathRate2: 1 / 365 / 10
+      deathRate2: 1 / 365 / 10,
     }
 
     this.param = _.cloneDeep(this.defaultParams)
 
     this.varEvents.push(['susceptible', 'latentEarly', 'rateForce'])
     this.varEvents.push([
-      'susceptiblePastInfection',
+      'susceptibleRecovered',
       'latentEarly',
-      'rateForceAgain'
+      'rateForceRecovered'
+    ])
+    this.varEvents.push([
+      'susceptibleTreated',
+      'latentEarly',
+      'rateForceTreated'
     ])
 
     this.paramEvents.push(['latentEarly', 'latentRemote', 'latentChangeRate'])
     this.paramEvents.push(['latentEarly', 'infectious', 'infectionEarlyRate'])
     this.paramEvents.push(['latentRemote', 'infectious', 'infectionLateRate'])
 
-    this.paramEvents.push(['latentEarly', 'susceptible', 'treatmentEarlyRate'])
+    this.paramEvents.push(['latentEarly', 'susceptibleTreated', 'treatmentEarlyRate'])
     this.paramEvents.push([
       'latentRemote',
-      'susceptible',
+      'susceptibleTreated',
       'treatmentRemoteRate'
     ])
 
@@ -61,9 +69,10 @@ class TbModel extends PopJs {
     this.paramEvents.push(['diagnosed', 'treated', 'toTreatementRate'])
     this.paramEvents.push(['infectious', 'dead', 'deathRate1'])
     this.paramEvents.push(['treated', 'dead', 'deathRate2'])
+
     this.paramEvents.push([
       'treated',
-      'susceptiblePastInfection',
+      'susceptibleRecovered',
       'activeTreatmentRate'
     ])
 
@@ -105,13 +114,13 @@ class TbModel extends PopJs {
         decimal: 0
       },
       {
-        key: 'betaRatio',
-        value: 0.5,
-        interval: 0.01,
+        key: 'betaRecoveredRatio',
+        value: 1,
+        interval: 0.1,
         placeHolder: '',
-        max: 2,
+        max: 3,
         label: 'Relative Susceptibility following TB',
-        decimal: 2
+        decimal: 1
       },
       {
         key: 'caseDetectionRate',
@@ -175,7 +184,8 @@ class TbModel extends PopJs {
 
   calcExtraParams () {
     this.param.beta = this.param.betaPerYear / 365
-    this.param.betaAgain = this.param.betaRatio * this.param.beta
+    this.param.betaRecovered = this.param.betaRecoveredRatio * this.param.beta
+    this.param.betaTreated = this.param.betaTreatedRatio * this.param.beta
     this.param.diagnosisRate =
       (this.param.caseDetectionRate / (1 - this.param.caseDetectionRate)) *
       (1 / 365 / 3)
@@ -199,8 +209,10 @@ class TbModel extends PopJs {
     this.var.population = _.sum(_.values(this.compartment))
     this.var.rateForce =
       (this.param.beta * this.compartment.infectious) / this.var.population
-    this.var.rateForceAgain =
-      (this.param.betaAgain * this.compartment.infectious) / this.var.population
+    this.var.rateForceRecovered =
+      (this.param.betaRecovered * this.compartment.infectious) / this.var.population
+    this.var.rateForceTreated =
+      (this.param.betaTreated * this.compartment.infectious) / this.var.population
   }
 
   calcDiagnosticVars () {

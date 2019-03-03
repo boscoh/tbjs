@@ -39,7 +39,7 @@
         </v-data-table>
 
         <p>
-          <v-img src="static/diagram.jpg"></v-img>
+          <v-img src="static/diagram2.jpg"></v-img>
         </p>
       </v-flex>
     </v-layout>
@@ -70,7 +70,11 @@ export default {
         },
         {
           symbol: 'S2',
-          name: 'susceptiblePastInfection'
+          name: 'susceptibleRecovered'
+        },
+        {
+          symbol: 'S2',
+          name: 'susceptibleTreated'
         },
         {
           symbol: 'LA',
@@ -102,7 +106,11 @@ export default {
         },
         {
           symbol: '&beta;&#42;/&beta;',
-          name: 'Relative Susceptibility'
+          name: 'Relative Susceptibility for Recovered'
+        },
+        {
+          symbol: '&beta;&#42;&#42;/&beta;',
+          name: 'Relative Susceptibility for Treated'
         },
         {
           symbol: '&lambda;',
@@ -110,7 +118,11 @@ export default {
         },
         {
           symbol: '&lambda;&#42;',
-          name: 'Repeat Contact Rate'
+          name: 'Recovered Contact Rate'
+        },
+        {
+          symbol: '&lambda;&#42;&#42;',
+          name: 'Treated Contact Rate'
         },
         {
           symbol: 'N',
